@@ -62,6 +62,19 @@ class WhatsAppController{
         Element.prototype.hasClass = function(className){ // Checking if element has class
             return this.classList.contains(className);
         }
+        
+        HTMLFormElement.prototype.getForm = function(){ // Getting forms data
+            return new FormData(this);
+        
+        }
+
+        HTMLFormElement.prototype.toJSON = function(){ // Turning forms data to JSON
+            let json = {};
+            this.getForm().forEach((value, key)=>{
+                json[key] = value;
+            });
+            return json;
+        }
     }
 
     // Handling events
@@ -91,6 +104,30 @@ class WhatsAppController{
 
         this.elements.btnClosePanelAddContact.on('click', event=>{
             this.elements.panelAddContact.removeClass('open');
+        });
+
+        // Profile handling
+        // Photo upload
+        this.elements.photoContainerEditProfile.on('click', event=>{
+            this.elements.inputProfilePhoto.click();
+        });
+
+        // Choosing a name
+        this.elements.inputNamePanelEditProfile.on('keypress', event=>{
+            if(event.key === 'Enter'){
+                event.preventDefault();
+                this.elements.btnSavePanelEditProfile.click();
+            }
+        });
+
+        this.elements.btnSavePanelEditProfile.on('click', event=>{
+            console.log(this.elements.inputNamePanelEditProfile.innerHTML);
+        });
+
+        // Add contact panel handling
+        this.elements.formPanelAddContact.on('submit', event=>{
+            event.preventDefault();
+            let formData = new FormData(this.elements.formPanelAddContact);
         });
 
     };
